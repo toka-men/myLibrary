@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
         .book-list {
             list-style-type: none;
@@ -18,27 +19,49 @@
             margin: 5px;
             border-radius: 5px;
         }
+        form {
+            margin-bottom: 20px;
+        }
+        form input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        form button {
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Book Management System</h1>
-    
-    <!-- 書籍一覧を表示するための空のリスト -->
+
+    <!-- 書籍登録フォーム -->
+    <form id="book-form">
+        <input type="text" id="title" placeholder="Book Title" required>
+        <input type="text" id="author" placeholder="Author" required>
+        <input type="number" id="year" placeholder="Year" required>
+        <button type="submit">Add Book</button>
+    </form>
+
+    <!-- 書籍一覧を表示するためのリスト -->
     <ul id="book-list" class="book-list"></ul>
 
     <!-- JavaScriptファイルを読み込む -->
     <script>
-      // 書籍データをJSONファイルとして扱う場合
-const books = [
-  { "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "year": "1925" },
-  { "title": "1984", "author": "George Orwell", "year": "1949" },
-  { "title": "To Kill a Mockingbird", "author": "Harper Lee", "year": "1960" }
-];
+        // localStorageから書籍データを取得
+function loadBooks() {
+  const booksData = localStorage.getItem('books');
+  return booksData ? JSON.parse(booksData) : [];
+}
 
-// 書籍リストをHTMLに追加
+// 書籍データをlocalStorageに保存
+function saveBooks(books) {
+  localStorage.setItem('books', JSON.stringify(books));
+}
+
+// 書籍リストをHTMLに追加する関数
 function displayBooks(books) {
   const bookList = document.getElementById('book-list');
-
+  bookList.innerHTML = ''; // リストを一度クリア
   books.forEach(book => {
     const bookItem = document.createElement('li');
     bookItem.className = 'book-item';
@@ -47,9 +70,40 @@ function displayBooks(books) {
   });
 }
 
-// 書籍の表示を実行
-document.addEventListener('DOMContentLoaded', () => {
+// フォームから新しい書籍を追加する関数
+function addBook(event) {
+  event.preventDefault(); // ページのリロードを防ぐ
+
+  // フォームの入力を取得
+  const title = document.getElementById('title').value;
+  const author = document.getElementById('author').value;
+  const year = document.getElementById('year').value;
+
+  // 新しい書籍オブジェクトを作成
+  const newBook = { title, author, year };
+
+  // 書籍データに追加
+  let books = loadBooks();
+  books.push(newBook);
+
+  // 書籍データを保存
+  saveBooks(books);
+
+  // 書籍リストを再描画
   displayBooks(books);
+
+  // フォームをクリア
+  document.getElementById('book-form').reset();
+}
+
+// ページ読み込み時に書籍を表示
+document.addEventListener('DOMContentLoaded', () => {
+  const books = loadBooks();
+  displayBooks(books);
+
+  // フォーム送信時のイベントリスナーを追加
+  const bookForm = document.getElementById('book-form');
+  bookForm.addEventListener('submit', addBook);
 });
     </script>
 </body>
