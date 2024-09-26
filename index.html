@@ -1,13 +1,56 @@
 <!DOCTYPE html>
-<html lang="ja">
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <title>myLibrary</title>
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .book-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .book-item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Management System</h1>
+    
+    <!-- 書籍一覧を表示するための空のリスト -->
+    <ul id="book-list" class="book-list"></ul>
 
-  <body>
-    <h1>MY Library</h1>
-    <a href="./index.html">Click hire</a>
-    <img src="./gonzui_1.jpg" alt="ごんずい">
-  </body>
+    <!-- JavaScriptファイルを読み込む -->
+    <script>
+      // 書籍データをJSONファイルとして扱う場合
+const books = [
+  { "title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "year": "1925" },
+  { "title": "1984", "author": "George Orwell", "year": "1949" },
+  { "title": "To Kill a Mockingbird", "author": "Harper Lee", "year": "1960" }
+];
+
+// 書籍リストをHTMLに追加
+function displayBooks(books) {
+  const bookList = document.getElementById('book-list');
+
+  books.forEach(book => {
+    const bookItem = document.createElement('li');
+    bookItem.className = 'book-item';
+    bookItem.textContent = `${book.title} by ${book.author} (${book.year})`;
+    bookList.appendChild(bookItem);
+  });
+}
+
+// 書籍の表示を実行
+document.addEventListener('DOMContentLoaded', () => {
+  displayBooks(books);
+});
+    </script>
+</body>
 </html>
